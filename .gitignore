@@ -2,8 +2,6 @@
 
 # Compiled output
 /src
-/dist
-!/dist/my_site/browser/
 /tmp
 /out-tsc
 /bazel-out
