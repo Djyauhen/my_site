@@ -15,12 +15,14 @@ import {Subscription} from "rxjs";
 import {ResponseType} from "../types/response-type";
 import {environment} from "../enviroments/environment.developer";
 import {LoaderComponent} from "./shared/components/loader/loader.component";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {MatDialog, MatDialogContent, MatDialogRef} from "@angular/material/dialog";
+import {MatMenuModule} from "@angular/material/menu";
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HttpClientModule, ReactiveFormsModule, NgOptimizedImage, LoaderComponent],
+  imports: [CommonModule, RouterOutlet, HttpClientModule, ReactiveFormsModule, NgOptimizedImage, LoaderComponent, MatMenuModule, MatButtonModule, MatDialogContent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -31,6 +33,7 @@ export class AppComponent {
   worksItems: WorksItems[] = [];
   socialsItems: SocialItems[] = [];
   subscriptions: Subscription[] = [];
+  detailWork: WorksItems | null = null;
   form = this.fb.group({
     name: ['', Validators.required],
     phone: ['', Validators.required],
@@ -38,10 +41,11 @@ export class AppComponent {
     message: ['', Validators.required],
   });
   popupMessage: boolean = false;
+  visibleWorks: boolean = false;
 
 
   @ViewChild('popup') popup!: TemplateRef<ElementRef>;
-  @ViewChild('menuItem') menuItem!: TemplateRef<ElementRef>;
+  @ViewChild('aboutProject') aboutProject!: TemplateRef<ElementRef>;
   dialogRef: MatDialogRef<any> | null = null;
 
   constructor(private menuService: MenuItemsService,
@@ -57,24 +61,27 @@ export class AppComponent {
     this.menuItems = this.menuService.getMenuItems();
     this.skillsItems = this.skillsService.getSkillsItems();
     this.socialsItems = this.socialService.getSocialItems();
-    this.subscription = this.worksService.getWorksItems()
+    this.subscription = this.worksService.getVisibleWorksItems()
       .subscribe({
         next: data => {
-          data.forEach(item => {
-            let imageId = item.image.split('/')[5];
-            let imageUrl = `https://drive.google.com/uc?export=view&id=${imageId}`
-            this.worksItems.push({
-              image: imageUrl,
-              name: item.name,
-              description: item.description
-            })
-          })
+          this.worksItems = data;
+        }
+      });
+  }
+
+  allWorks() {
+    this.visibleWorks = true;
+    this.subscription = this.worksService.getAllWorksItems()
+      .subscribe({
+        next: data => {
+          this.worksItems = data;
         }
       });
   }
 
   set subscription(subscription: Subscription) {
     this.subscriptions.push(subscription);
+
   }
 
   ngOnDestroy() {
@@ -105,12 +112,13 @@ export class AppComponent {
         },
         error: err => {
           this.clearForm();
-          this.popupMessage = true;
+          this.popupMessage = false;
           this.openPopup(this.popup);
         }
       })
     }
   }
+
 
   clearForm() {
     this.form.reset();
@@ -119,6 +127,7 @@ export class AppComponent {
 
   closePopup() {
     this.dialogRef?.close();
+    this.detailWork = null;
   }
 
   openPopup(target: TemplateRef<ElementRef>) {
@@ -126,8 +135,13 @@ export class AppComponent {
     this.dialogRef.backdropClick();
   }
 
-  // openMenu() {
-  //   let menuItem = document.getElementById('menu');
-  //   if (menuItem) menuItem.style.display = 'flex';
-  // }
+  openProject(work: WorksItems, target: TemplateRef<ElementRef>): void {
+    if (work) this.detailWork = work;
+    this.dialogRef = this.dialog.open(target);
+    this.dialogRef.backdropClick();
+  }
+
+  scrollTo(target: string) {
+      document.getElementById(target)?.scrollIntoView({behavior: "smooth"});
+  }
 }

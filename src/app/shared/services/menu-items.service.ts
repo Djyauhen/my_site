@@ -10,32 +10,32 @@ export class MenuItemsService {
     {
       title: "Философия",
       surname: 'Философия и ценности',
-      href: "#"
+      href: "philosophy"
     },
     {
       title: "Навыки",
       surname: 'Мои навыки',
-      href: "#"
+      href: "skills"
     },
     {
       title: "Работы",
       surname: 'Мои работы',
-      href: "#"
+      href: "works"
     },
     {
       title: "Блог",
       surname: 'Блог в Instagram',
-      href: "#"
+      href: "instagram"
     },
     {
       title: "GitHub",
       surname: 'Репозиторий GitHub',
-      href: "#"
+      href: "github"
     },
     {
       title: "Контакты",
       surname: 'Свяжись со мной',
-      href: "#"
+      href: "order"
     }
   ]
 

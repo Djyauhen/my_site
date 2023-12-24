@@ -9,27 +9,27 @@ export class SocialItemsService {
     {
       name: 'VK',
       image: 'vk.png',
-      href: '#'
+      href: 'https://vk.com/djzhen'
     },
     {
       name: 'Instagram',
       image: 'instagram.png',
-      href: '#'
+      href: 'https://www.instagram.com/evgenij_frontend_developer/'
     },
     {
       name: 'LinkedIn',
       image: 'linkedin.png',
-      href: '#'
+      href: 'https://www.linkedin.com/in/djzhen/'
     },
     {
       name: 'Telegram',
       image: 'telegram.png',
-      href: '#'
+      href: 'https://t.me/djzhen96'
     },
     {
       name: 'GitHub',
       image: 'github.png',
-      href: '#'
+      href: 'https://github.com/Djyauhen'
     },
   ]
 
